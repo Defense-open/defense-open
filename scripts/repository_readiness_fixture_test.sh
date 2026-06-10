@@ -13,13 +13,13 @@ cat >"$fake_bin/gh" <<'SH'
 set -euo pipefail
 
 if [[ "${1:-}" == "repo" && "${2:-}" == "view" ]]; then
-  echo '{"nameWithOwner":"kingkyylian/panic-scan","url":"https://github.com/kingkyylian/panic-scan","defaultBranchRef":{"name":"main"}}'
+  echo '{"nameWithOwner":"Ardwig1/panic-scan-open","url":"https://github.com/Ardwig1/panic-scan-open","defaultBranchRef":{"name":"main"}}'
   exit 0
 fi
 
 if [[ "${1:-}" == "api" ]]; then
   case "${2:-}" in
-    repos/kingkyylian/panic-scan/actions/workflows/ci.yml|repos/kingkyylian/panic-scan/actions/workflows/release.yml)
+    repos/Ardwig1/panic-scan-open/actions/workflows/ci.yml|repos/Ardwig1/panic-scan-open/actions/workflows/release.yml)
       echo '{}'
       exit 0
       ;;
@@ -58,13 +58,13 @@ SH
 chmod +x "$fake_bin/gh"
 
 blocked_output="$root/blocked.txt"
-if PATH="$fake_bin:$PATH" scripts/repository_readiness_audit.sh kingkyylian/panic-scan >"$blocked_output" 2>&1; then
+if PATH="$fake_bin:$PATH" scripts/repository_readiness_audit.sh Ardwig1/panic-scan-open >"$blocked_output" 2>&1; then
   echo "expected repository readiness audit to fail when signing configuration is missing" >&2
   exit 1
 fi
 
 for expected in \
-  "PASS GitHub repository is visible to gh: kingkyylian/panic-scan" \
+  "PASS GitHub repository is visible to gh: Ardwig1/panic-scan-open" \
   "PASS GitHub Actions CI workflow is visible" \
   "PASS GitHub Actions Release workflow is visible" \
   "FAIL PANICSCAN_SIGNING_REQUIRED repository variable is not enabled" \
@@ -82,7 +82,7 @@ done
 ready_output="$root/ready.txt"
 PANICSCAN_FAKE_READINESS_READY=1 \
   PATH="$fake_bin:$PATH" \
-  scripts/repository_readiness_audit.sh kingkyylian/panic-scan >"$ready_output" 2>&1
+  scripts/repository_readiness_audit.sh Ardwig1/panic-scan-open >"$ready_output" 2>&1
 
 for expected in \
   "PASS PANICSCAN_SIGNING_REQUIRED is enabled" \

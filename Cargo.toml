@@ -10,7 +10,7 @@ members = [
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/kingkyylian/panic-scan"
+repository = "https://github.com/Ardwig1/panic-scan-open"
 
 [workspace.dependencies]
 anyhow = "1"

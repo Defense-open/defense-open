@@ -235,7 +235,7 @@ print_usb_candidates() {
           printf 'candidate=%s\tbus_type=%s\tlabel=%s\tcommand=scripts/physical_usb_acceptance.sh %s\n' \
             "$path" "${bus:-unknown}" "${label:-}" "$(quote_command_arg "$path")"
           found=1
-        done < <(powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "\$ErrorActionPreference='SilentlyContinue'; Get-Volume | ForEach-Object { \$v=\$_; \$d=\$v | Get-Partition | Get-Disk; if (\$d.BusType -eq 'USB') { [Console]::WriteLine((\$v.DriveLetter.ToString() + ':' + \"`t\" + \$d.BusType + \"`t\" + \$v.FileSystemLabel)) } }" 2>/dev/null || true)
+        done < <(powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '$ErrorActionPreference="SilentlyContinue"; Get-Volume | ForEach-Object { $v=$_; $d=$v | Get-Partition | Get-Disk; if ($d.BusType -eq "USB") { [Console]::WriteLine(($v.DriveLetter.ToString() + ":" + "`t" + $d.BusType + "`t" + $v.FileSystemLabel)) } }' 2>/dev/null || true)
       fi
       ;;
   esac
