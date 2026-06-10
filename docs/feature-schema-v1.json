@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://panic-scan.local/schemas/features-v1.json",
+  "title": "PanicScan Feature Export v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_report_schema_version",
+    "app_version",
+    "mode",
+    "vector_count",
+    "vectors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "panicscan.features.v1" },
+    "source_report_schema_version": { "const": "1" },
+    "app_version": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["Quick", "Full", "Usb"] },
+    "vector_count": { "type": "integer", "minimum": 0 },
+    "vectors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/vector" }
+    }
+  },
+  "$defs": {
+    "vector": {
+      "type": "object",
+      "required": [
+        "finding_ref",
+        "severity",
+        "score",
+        "score_band",
+        "recommended_action",
+        "has_item_path",
+        "has_process_id",
+        "has_persistence_location",
+        "path_class",
+        "path_extension",
+        "evidence_count",
+        "evidence_weight_sum",
+        "evidence_kinds",
+        "evidence_codes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "finding_ref": {
+          "type": "string",
+          "pattern": "^finding-[0-9]{6}$"
+        },
+        "severity": { "enum": ["Info", "Low", "Medium", "High", "Critical"] },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "score_band": {
+          "enum": [
+            "clean_looking",
+            "noteworthy",
+            "suspicious",
+            "high_risk",
+            "likely_malicious"
+          ]
+        },
+        "recommended_action": {
+          "enum": [
+            "Ignore",
+            "Review",
+            "Quarantine",
+            "OfflineSecurityScan",
+            "ManualExpertReview"
+          ]
+        },
+        "has_item_path": { "type": "boolean" },
+        "has_process_id": { "type": "boolean" },
+        "has_persistence_location": { "type": "boolean" },
+        "path_class": {
+          "enum": [
+            "none",
+            "user_downloads",
+            "user_desktop",
+            "temp",
+            "removable_or_mounted",
+            "system",
+            "other"
+          ]
+        },
+        "path_extension": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "evidence_weight_sum": { "type": "integer", "minimum": 0 },
+        "evidence_kinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "Persistence",
+              "Execution",
+              "File",
+              "Script",
+              "Shortcut",
+              "Browser",
+              "Network",
+              "Miner",
+              "Reputation"
+            ]
+          }
+        },
+        "evidence_codes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

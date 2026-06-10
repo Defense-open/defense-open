@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://panic-scan.local/schemas/report-v1.json",
+  "title": "PanicScan Report v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "app_version",
+    "mode",
+    "started_at",
+    "finished_at",
+    "duration_ms",
+    "memory_peak_kb",
+    "scanned_files",
+    "scanned_persistence_entries",
+    "findings",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1" },
+    "app_version": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["Quick", "Full", "Usb"] },
+    "started_at": { "type": "string", "minLength": 1 },
+    "finished_at": { "type": "string", "minLength": 1 },
+    "duration_ms": { "type": "integer", "minimum": 0 },
+    "memory_peak_kb": {
+      "anyOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "null" }
+      ]
+    },
+    "scanned_files": { "type": "integer", "minimum": 0 },
+    "scanned_persistence_entries": { "type": "integer", "minimum": 0 },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "severity",
+        "score",
+        "title",
+        "explanation",
+        "item_path",
+        "process_id",
+        "persistence_location",
+        "evidences",
+        "recommended_action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["Info", "Low", "Medium", "High", "Critical"] },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "title": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
+        "item_path": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "process_id": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "persistence_location": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "evidences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+        "recommended_action": {
+          "enum": [
+            "Ignore",
+            "Review",
+            "Quarantine",
+            "OfflineSecurityScan",
+            "ManualExpertReview"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["kind", "code", "title", "detail", "weight"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "Persistence",
+            "Execution",
+            "File",
+            "Script",
+            "Shortcut",
+            "Browser",
+            "Network",
+            "Miner",
+            "Reputation"
+          ]
+        },
+        "code": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string" },
+        "weight": { "type": "integer", "minimum": 0, "maximum": 255 }
+      }
+    }
+  }
+}
