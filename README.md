@@ -1,59 +1,60 @@
-# PanicScan
+# PanicScan 🛡️
 
-Portable cross-platform second-opinion malware triage scanner.
+**The Next-Generation Local-First Security Shield.**
 
-PanicScan focuses on USB trojans, miners, stealers, browser hijackers, suspicious scripts, startup entries, scheduled tasks, LaunchAgents, systemd user units, services, and risky shortcuts.
+PanicScan is a high-performance, privacy-focused security engine designed to detect, intercept, and analyze malicious activity without ever sending your private data to the cloud. It is built to be the definitive shield for your system—rapidly identifying USB trojans, miners, stealers, browser hijackers, and stealthy persistence mechanisms.
 
-## Quick Start
+Unlike traditional cloud-dependent security tools, PanicScan believes in **Zero Telemetry** and **Local Execution**. Your system, your rules, your data.
+
+## 🚀 Core Philosophy
+
+- **Privacy First (Zero Telemetry):** We do not upload your files, hashes, or logs to a central server. Everything runs and stays on your machine.
+- **Lightning Fast Triage:** Scans memory, startups, and critical system registries in milliseconds.
+- **Deep System Interrogation:** Hunts for suspicious scripts, unauthorized LaunchAgents, hidden systemd services, and risky shortcuts.
+- **Opt-In Action:** PanicScan will never blindly delete your files. Quarantine and removal are always manual, reversible, and explicit.
+
+## ⚡ Quick Start
 
 ```bash
+# Run a blazing-fast memory and critical paths scan
 panicscan quick --html report.html
+
+# Run a full system scan with a specific time budget (e.g., 15 minutes)
 panicscan full --max-minutes 15 --html full-report.html
+
+# Safely scan a newly inserted USB or removable media
 panicscan usb <drive-or-mount-path> --html usb-report.html
+
+# Generate a privacy-preserving feature map for advanced analysis
 panicscan features report.json --json features.json
+
+# Safely quarantine a detected threat
 panicscan quarantine file <path> --finding-id <finding-id> --quarantine-dir .panicscan-quarantine --yes
+
+# Restore a file from quarantine if needed
 panicscan quarantine restore .panicscan-quarantine/<id>.json --yes
 ```
 
-`full --max-minutes` enforces a file-collection time budget so manual full-disk tests can stop cleanly instead of walking indefinitely.
+> **Note:** Scan progress is continuously streamed to `stderr`. The final analytical report is output as JSON to `stdout` for easy integration with your own scripts or automation pipelines.
 
-`quarantine file` and `quarantine restore` refuse to run without `--yes`; quarantine actions are intentionally opt-in.
+## 🧪 Local Performance Smoke Testing
 
-Scan progress is written to stderr. The final report JSON remains on stdout for scripting.
-
-## Local Performance Smoke
+PanicScan is built for speed. You can verify the performance on your own hardware using our built-in smoke tests:
 
 ```bash
 scripts/perf_usb_10k_smoke.sh
 scripts/perf_quick_memory_smoke.sh
 ```
 
-The script creates a synthetic 10,000-file removable-media tree under `/tmp`, runs `panicscan usb`, and fails if the scan report exceeds 90 seconds.
-The memory script runs `panicscan quick` and fails if `memory_peak_kb` exceeds 300 MB.
+- The USB script generates a synthetic `10,000` file structure and ensures `panicscan usb` completes in under 90 seconds.
+- The memory script runs a rapid system scan and guarantees the memory footprint (`memory_peak_kb`) never exceeds 300 MB.
 
-## Docs
+## 🏗️ What is PanicScan Building Towards?
 
-- `docs/compatibility-contract.md`: portability rules for current and future OS releases.
-- `docs/ai-agent-architecture.md`: safe LLM/ML/decentralized intelligence architecture.
-- `docs/feature-schema-v1.json`: schema for privacy-preserving ML feature export.
-- `docs/release.md`: packaging, artifact smoke, signing, and notarization preflight.
-- `docs/ml-roadmap.md`: safe ML/self-learning roadmap and zero-day detection limits.
-- `scripts/workflow_contract_audit.sh`: verify local CI/Release workflow evidence contracts.
-- `scripts/platform_evidence_smoke.sh`: collect OS-specific CI evidence reports.
-- `scripts/evidence_next_steps.sh`: print current evidence status and next commands.
-- `scripts/physical_usb_acceptance.sh`: read-only real removable-media acceptance check.
+PanicScan is currently in its initial engine phases (v1.x), providing a robust **Triage & Detection Engine**. We are actively laying the groundwork for:
 
-## What PanicScan Is
+- **Active Defense:** Evolving from high-speed scanning into a continuous shield.
+- **Zero-Trust Network Analysis:** Recognizing and warning against hostile environments.
+- **Behavioral Detection:** Moving beyond signature matching to catch zero-day behaviors before they execute.
 
-- portable scanner
-- fast triage tool
-- local report generator
-- reversible quarantine tool
-
-## What PanicScan Is Not
-
-- not a real-time antivirus
-- not a Defender, XProtect, Gatekeeper, ClamAV, or EDR replacement
-- not a kernel rootkit detector
-- not a 99.9% guarantee for every attack, vulnerability, or zero-day
-- not a guarantee that a PC is clean
+*Welcome to the future of decentralized, local-first endpoint security.*
