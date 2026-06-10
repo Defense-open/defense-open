@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Daemon kimliği -->
+    <key>Label</key>
+    <string>com.panicscan.daemon</string>
+
+    <!-- Çalıştırılacak program ve argümanlar -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/panicscan-daemon</string>
+        <string>run</string>
+    </array>
+
+    <!-- Sistem açıldığında otomatik başlat -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Çöktüğünde yeniden başlat -->
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Log dosyaları -->
+    <key>StandardOutPath</key>
+    <string>/var/log/panicscan/daemon.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/panicscan/daemon-error.log</string>
+
+    <!-- Ortam değişkenleri -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PANICSCAN_LOG</key>
+        <string>panicscan_daemon=info,warn</string>
+    </dict>
+
+    <!-- Root yetkisiyle çalış (dosya izleme için gerekli) -->
+    <key>UserName</key>
+    <string>root</string>
+</dict>
+</plist>

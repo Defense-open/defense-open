@@ -1,0 +1,4 @@
+# Static-link the MSVC CRT on Windows so the released .exe has zero
+# runtime dependencies — no "VCRUNTIME140.dll not found" errors.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]

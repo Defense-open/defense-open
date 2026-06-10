@@ -1,0 +1,49 @@
+[package]
+name = "panicscan-daemon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "PanicScan background daemon — real-time EDR service"
+
+[lib]
+name = "panicscan_daemon"
+path = "src/lib.rs"
+
+[[bin]]
+name = "panicscan-daemon"
+path = "src/main.rs"
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# CLI parsing
+clap = { workspace = true }
+
+# Serialization (IPC protocol)
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+
+# File system watching
+notify = { workspace = true }
+notify-debouncer-mini = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# Core scanning library
+panicscan-core = { path = "../panicscan-core" }
+
+[target.'cfg(windows)'.dependencies]
+windows-service = { workspace = true }
+windows = { workspace = true }

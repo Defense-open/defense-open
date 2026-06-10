@@ -1,0 +1,25 @@
+[Unit]
+Description=PanicScan Real-Time Protection Daemon
+Documentation=https://github.com/kingkyylian/panic-scan
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+# 'run' komutu daemon loop'unu doğrudan başlatır.
+ExecStart=/usr/local/bin/panicscan-daemon run
+Restart=always
+RestartSec=5
+# Yalnızca standart çıktılar — journal'a gider.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=panicscan-daemon
+# Güvenlik kısıtlamaları
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/log/panicscan /run/panicscan %h/.panicscan
+
+[Install]
+WantedBy=multi-user.target
