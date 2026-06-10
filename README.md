@@ -13,7 +13,15 @@ Unlike traditional cloud-dependent security tools, PanicScan believes in **Zero 
 - **Deep System Interrogation:** Hunts for suspicious scripts, unauthorized LaunchAgents, hidden systemd services, and risky shortcuts.
 - **Opt-In Action:** PanicScan will never blindly delete your files. Quarantine and removal are always manual, reversible, and explicit.
 
-## ⚡ Quick Start
+## 📥 Installation (For End Users)
+
+1. Go to the [Releases](https://github.com/PanicScan/panic-scan-open/releases) page.
+2. Download the latest `.zip` or executable for your operating system (Windows, macOS, or Linux).
+3. Extract the downloaded file.
+
+*Note: PanicScan is currently provided as a Command-Line Interface (CLI) tool. Our Graphical User Interface (GUI) and fully automated background Daemon are in active development.*
+
+## ⚡ Usage (CLI)
 
 ```bash
 # Run a blazing-fast memory and critical paths scan
@@ -37,17 +45,17 @@ panicscan quarantine restore .panicscan-quarantine/<id>.json --yes
 
 > **Note:** Scan progress is continuously streamed to `stderr`. The final analytical report is output as JSON to `stdout` for easy integration with your own scripts or automation pipelines.
 
-## 🧪 Local Performance Smoke Testing
+## 🛠️ For Developers (Local Testing)
 
-PanicScan is built for speed. You can verify the performance on your own hardware using our built-in smoke tests:
+PanicScan is built to run efficiently. Developers can verify baseline stability on their own hardware using built-in synthetic tests:
 
 ```bash
 scripts/perf_usb_10k_smoke.sh
 scripts/perf_quick_memory_smoke.sh
 ```
 
-- The USB script generates a synthetic `10,000` file structure and ensures `panicscan usb` completes in under 90 seconds.
-- The memory script runs a rapid system scan and guarantees the memory footprint (`memory_peak_kb`) never exceeds 300 MB.
+- The USB script generates a synthetic file structure to verify media scanning logic.
+- The memory script runs a rapid system scan to ensure memory footprint (`memory_peak_kb`) remains highly optimized.
 
 ## 🏗️ What is PanicScan Building Towards?
 
