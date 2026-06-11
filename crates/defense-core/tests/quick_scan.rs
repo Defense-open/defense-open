@@ -1,6 +1,6 @@
 use std::fs;
 
-use panicscan_core::{ScanMode, ScanRequest, ScanRunner};
+use defense_core::{ScanMode, ScanRequest, ScanRunner};
 
 #[test]
 fn quick_scan_handles_synthetic_tree_and_finds_script() {

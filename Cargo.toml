@@ -1,10 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/panicscan-core",
-  "crates/panicscan-cli",
-  "crates/panicscan-daemon"
-, "crates/panicscan-ml"]
+  "crates/defense-core",
+  
+  "crates/defense-daemon"
+, "crates/defense-ml"]
 
 [workspace.package]
 version = "0.1.0"

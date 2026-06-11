@@ -210,7 +210,7 @@ async fn dispatch(request: IpcRequest, state: Arc<DaemonState>) -> IpcResponse {
             // İleride bu da daemon event loop'una gidecek.
             use crate::ipc_types::ScanResultSummary;
             use chrono::Utc;
-            use panicscan_core::{ScanMode, ScanRequest, ScanRunner};
+            use defense_core::{ScanMode, ScanRequest, ScanRunner};
             use std::time::Instant;
 
             let t = Instant::now();
@@ -222,11 +222,11 @@ async fn dispatch(request: IpcRequest, state: Arc<DaemonState>) -> IpcResponse {
                         .findings
                         .iter()
                         .map(|f| match f.severity {
-                            panicscan_core::report::FindingSeverity::Critical => 4u8,
-                            panicscan_core::report::FindingSeverity::High => 3,
-                            panicscan_core::report::FindingSeverity::Medium => 2,
-                            panicscan_core::report::FindingSeverity::Low => 1,
-                            panicscan_core::report::FindingSeverity::Info => 0,
+                            defense_core::report::FindingSeverity::Critical => 4u8,
+                            defense_core::report::FindingSeverity::High => 3,
+                            defense_core::report::FindingSeverity::Medium => 2,
+                            defense_core::report::FindingSeverity::Low => 1,
+                            defense_core::report::FindingSeverity::Info => 0,
                         })
                         .max()
                         .unwrap_or(0);

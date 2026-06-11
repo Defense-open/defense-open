@@ -207,8 +207,8 @@ impl FsWatcherTask {
 // ─── Tarama + log ────────────────────────────────────────────────────────────
 
 async fn scan_and_log(path: String, state: Arc<DaemonState>, event_log: PathBuf) {
-    use panicscan_core::report::FindingSeverity;
-    use panicscan_core::{ScanMode, ScanRequest, ScanRunner};
+    use defense_core::report::FindingSeverity;
+    use defense_core::{ScanMode, ScanRequest, ScanRunner};
     use std::time::Instant;
 
     let t = Instant::now();

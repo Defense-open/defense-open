@@ -55,7 +55,7 @@ pub async fn run_daemon_loop() -> Result<()> {
 
     // 4.5 P2P Tehdit İstihbaratı Düğümünü Başlat
     let _p2p_handle = tokio::spawn(async move {
-        if let Err(e) = panicscan_core::p2p::start_node().await {
+        if let Err(e) = defense_core::p2p::start_node().await {
             tracing::error!("P2P Node hatası: {e}");
         }
     });

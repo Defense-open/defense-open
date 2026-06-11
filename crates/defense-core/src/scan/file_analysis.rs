@@ -64,7 +64,7 @@ fn analyze_file_bytes_for_path(
     let susp_imports = 0.0; // P/E parser can override later
     let has_signature = 0.0;
 
-    if let Ok(ml_score) = panicscan_ml::MlEngine::global().predict([
+    if let Ok(ml_score) = defense_ml::MlEngine::global().predict([
         entropy,
         size,
         susp_imports,
