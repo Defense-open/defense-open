@@ -21,7 +21,26 @@ Unlike traditional cloud-dependent security tools, PanicScan believes in **Zero 
 
 *Note: PanicScan is currently provided as a Command-Line Interface (CLI) tool. Our Graphical User Interface (GUI) and fully automated background Daemon are in active development.*
 
-## ⚡ Usage (CLI)
+## 🛡️ Real-Time Active Protection (Daemon)
+
+PanicScan's true power lies in its continuous, background shield. By installing the Daemon, PanicScan integrates with your operating system to actively monitor all attack surfaces 24/7 without requiring manual scans.
+
+To install and activate the real-time shield (requires Administrator/root privileges):
+
+```bash
+# Install PanicScan as a background OS Service
+panicscan-daemon install
+
+# Start the continuous protection service
+panicscan-daemon start
+
+# Check the current status of the active shield
+panicscan-daemon status
+```
+
+*Once installed, PanicScan silently protects your system across all vectors. You can forget about it—we've got you covered.*
+
+## ⚡ Manual Triage Usage (CLI)
 
 ```bash
 # Run a blazing-fast memory and critical paths scan
