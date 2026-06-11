@@ -180,8 +180,7 @@ async fn cmd_status() -> Result<()> {
         let (read_half, mut write_half) = stream.into_split();
         let mut reader = BufReader::new(read_half);
 
-        let request =
-            serde_json::to_string(&defense_daemon::ipc_types::IpcRequest::Status)? + "\n";
+        let request = serde_json::to_string(&defense_daemon::ipc_types::IpcRequest::Status)? + "\n";
         write_half.write_all(request.as_bytes()).await?;
         write_half.flush().await?;
 
@@ -208,8 +207,7 @@ async fn cmd_status() -> Result<()> {
         let (read_half, mut write_half) = tokio::io::split(pipe);
         let mut reader = BufReader::new(read_half);
 
-        let request =
-            serde_json::to_string(&defense_daemon::ipc_types::IpcRequest::Status)? + "\n";
+        let request = serde_json::to_string(&defense_daemon::ipc_types::IpcRequest::Status)? + "\n";
         write_half.write_all(request.as_bytes()).await?;
         write_half.flush().await?;
 
