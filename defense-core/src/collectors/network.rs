@@ -81,7 +81,7 @@ fn active_connections(base_id: u64) -> Vec<SecurityEvent> {
                 }
             }
         }
-        return events;
+        events
     }
     #[cfg(not(target_os = "linux"))]
     {

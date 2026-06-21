@@ -3,7 +3,6 @@ use std::time::Duration;
 use async_trait::async_trait;
 
 use crate::collector::{Collector, EventSender};
-use crate::event::{EventKind, RegistryOp, SecurityEvent};
 
 /// Windows Registry collector — monitors high-value persistence keys.
 /// No-op on non-Windows platforms.
@@ -42,6 +41,7 @@ impl Collector for RegistryCollector {
 
 #[cfg(target_os = "windows")]
 async fn run_windows(poll_interval: Duration, tx: EventSender) -> anyhow::Result<()> {
+    use crate::event::{EventKind, RegistryOp, SecurityEvent};
     use std::collections::HashMap;
     use winreg::enums::*;
     use winreg::RegKey;
