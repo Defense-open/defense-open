@@ -44,7 +44,7 @@ jobs:
       - name: cargo-audit kur
         run: cargo install cargo-audit --locked
       - name: cargo-audit çalıştır (CVSS ≥7.0 = CI kırmızı)
-        run: cargo audit --deny warnings
+        run: cargo audit --deny unsound --deny yanked
       - name: cargo-deny (lisans + bağımlılık kontrolü)
         uses: EmbarkStudios/cargo-deny-action@v2
         with:

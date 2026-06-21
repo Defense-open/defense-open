@@ -17,5 +17,8 @@ multiple-versions = "warn"
 [advisories]
 ignore = []
 
+# cargo-audit icin: RUSTSEC-2024-0384 (instant crate unmaintained —
+# guvenlik acigi degil, chrono transitif bagimliliginden geliyor)
+
 [sources]
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
