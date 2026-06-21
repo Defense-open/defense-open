@@ -1,0 +1,9 @@
+[package]
+name = "defense-agent"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+defense-core = { path = "../defense-core" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
