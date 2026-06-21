@@ -1,0 +1,175 @@
+# Network kuralları — 10 kural
+
+[[rules]]
+id = "NET-001"
+name = "Connection to Common C2 Port"
+score = 70
+category = "command_and_control"
+mitre = "T1071"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "4444"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "1337"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "31337"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "8888"
+
+[[rules]]
+id = "NET-002"
+name = "DNS over Non-Standard Port"
+score = 65
+category = "command_and_control"
+mitre = "T1071.004"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "network.protocol"
+op = "equals"
+value = "udp"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "gt"
+value = "53"
+
+[[rules]]
+id = "NET-003"
+name = "Tor Default Port Connection"
+score = 80
+category = "command_and_control"
+mitre = "T1090.003"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "9050"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "9051"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "9150"
+
+[[rules]]
+id = "NET-004"
+name = "IRC Protocol Port"
+score = 60
+category = "command_and_control"
+mitre = "T1071.003"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "6667"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "6697"
+
+[[rules]]
+id = "NET-005"
+name = "RDP External Connection"
+score = 75
+category = "lateral_movement"
+mitre = "T1021.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "3389"
+[[rules.conditions]]
+field = "network.protocol"
+op = "equals"
+value = "tcp"
+
+[[rules]]
+id = "NET-006"
+name = "SMB External Connection"
+score = 70
+category = "lateral_movement"
+mitre = "T1021.002"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "445"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "139"
+
+[[rules]]
+id = "NET-007"
+name = "High Data Exfiltration Bytes Sent"
+score = 85
+category = "exfiltration"
+mitre = "T1041"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "network.bytes_sent"
+op = "gt"
+value = "104857600"
+
+[[rules]]
+id = "NET-008"
+name = "WinRM Remote Management Port"
+score = 65
+category = "lateral_movement"
+mitre = "T1021.006"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "5985"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "5986"
+
+[[rules]]
+id = "NET-009"
+name = "VNC Remote Access Port"
+score = 60
+category = "lateral_movement"
+mitre = "T1021.005"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "5900"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "5901"
+
+[[rules]]
+id = "NET-010"
+name = "Meterpreter Default HTTPS Port"
+score = 90
+category = "command_and_control"
+mitre = "T1573.002"
+recommended_action = "block"
+[[rules.conditions]]
+field = "network.dst_port"
+op = "eq"
+value = "443"
+[[rules.conditions]]
+field = "network.bytes_sent"
+op = "gt"
+value = "1048576"

@@ -1,0 +1,260 @@
+# Filesystem kuralları — 15 kural
+
+[[rules]]
+id = "FS-001"
+name = "Script Created in Temp Directory"
+score = 60
+category = "execution"
+mitre = "T1059"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\temp\\"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "/tmp/"
+
+[[rules]]
+id = "FS-002"
+name = "PowerShell Script File Created"
+score = 55
+category = "execution"
+mitre = "T1059.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".ps1"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "created"
+
+[[rules]]
+id = "FS-003"
+name = "Batch Script Created"
+score = 45
+category = "execution"
+mitre = "T1059.003"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".bat"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".cmd"
+
+[[rules]]
+id = "FS-004"
+name = "Executable Dropped in User Temp"
+score = 75
+category = "execution"
+mitre = "T1204.002"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".exe"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\appdata\\local\\temp"
+
+[[rules]]
+id = "FS-005"
+name = "DLL Dropped in System32"
+score = 85
+category = "persistence"
+mitre = "T1574.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\system32\\"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".dll"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "created"
+
+[[rules]]
+id = "FS-006"
+name = "Hosts File Modified"
+score = 80
+category = "defense_evasion"
+mitre = "T1565.001"
+recommended_action = "alert"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\drivers\\etc\\hosts"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "modified"
+
+[[rules]]
+id = "FS-007"
+name = "LSASS Memory Dump File"
+score = 100
+category = "credential_access"
+mitre = "T1003.001"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = "lsass.dmp"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = "lsass.exe.dmp"
+
+[[rules]]
+id = "FS-008"
+name = "Ransomware Extension Created"
+score = 95
+category = "impact"
+mitre = "T1486"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".encrypted"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".locked"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".crypted"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".crypt"
+
+[[rules]]
+id = "FS-009"
+name = "VBS Script Created"
+score = 60
+category = "execution"
+mitre = "T1059.005"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".vbs"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".vbe"
+
+[[rules]]
+id = "FS-010"
+name = "JavaScript Script Created"
+score = 55
+category = "execution"
+mitre = "T1059.007"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".js"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".jse"
+
+[[rules]]
+id = "FS-011"
+name = "SSH Authorized Keys Modified"
+score = 80
+category = "persistence"
+mitre = "T1098.004"
+recommended_action = "alert"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = "authorized_keys"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "modified"
+
+[[rules]]
+id = "FS-012"
+name = "Cron Job File Modified (Linux)"
+score = 75
+category = "persistence"
+mitre = "T1053.003"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "starts_with"
+value = "/etc/cron"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "modified"
+
+[[rules]]
+id = "FS-013"
+name = "Startup Folder File Created"
+score = 70
+category = "persistence"
+mitre = "T1547.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\start menu\\programs\\startup\\"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "created"
+
+[[rules]]
+id = "FS-014"
+name = "Web Shell Pattern in Web Directory"
+score = 90
+category = "persistence"
+mitre = "T1505.003"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "\\inetpub\\"
+[[rules.conditions]]
+field = "fs.path"
+op = "contains"
+value = "/var/www/"
+
+[[rules]]
+id = "FS-015"
+name = "Suspicious HTA File Created"
+score = 70
+category = "execution"
+mitre = "T1218.005"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "fs.path"
+op = "ends_with"
+value = ".hta"
+[[rules.conditions]]
+field = "fs.event_type"
+op = "equals"
+value = "created"

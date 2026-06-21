@@ -1,0 +1,262 @@
+# Process kuralları — 15 kural
+
+[[rules]]
+id = "PROC-001"
+name = "PowerShell Encoded Command"
+score = 85
+category = "execution"
+mitre = "T1059.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "-EncodedCommand"
+
+[[rules]]
+id = "PROC-002"
+name = "PowerShell Download Cradle"
+score = 90
+category = "execution"
+mitre = "T1059.001"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "DownloadString"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "DownloadFile"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "WebClient"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "Invoke-Expression"
+
+[[rules]]
+id = "PROC-003"
+name = "WMIC Remote Process Execution"
+score = 75
+category = "lateral_movement"
+mitre = "T1047"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "wmic"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "/node:"
+
+[[rules]]
+id = "PROC-004"
+name = "Mimikatz Keyword in Command Line"
+score = 100
+category = "credential_access"
+mitre = "T1003.001"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "sekurlsa"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "lsadump"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "mimikatz"
+
+[[rules]]
+id = "PROC-005"
+name = "Cmd Spawned from Office Application"
+score = 80
+category = "execution"
+mitre = "T1566.001"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "winword"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "excel"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "powerpnt"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "outlook"
+
+[[rules]]
+id = "PROC-006"
+name = "Netsh Firewall Rule Modification"
+score = 70
+category = "defense_evasion"
+mitre = "T1562.004"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "netsh"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "firewall"
+
+[[rules]]
+id = "PROC-007"
+name = "Scheduled Task Creation via Schtasks"
+score = 65
+category = "persistence"
+mitre = "T1053.005"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "schtasks"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "/create"
+
+[[rules]]
+id = "PROC-008"
+name = "Reg.exe Adding Run Key"
+score = 75
+category = "persistence"
+mitre = "T1547.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "reg.exe"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "CurrentVersion\\Run"
+
+[[rules]]
+id = "PROC-009"
+name = "CertUtil Decode (LOLBin)"
+score = 80
+category = "defense_evasion"
+mitre = "T1140"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "certutil"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "-decode"
+
+[[rules]]
+id = "PROC-010"
+name = "Rundll32 Executing DLL from Temp"
+score = 85
+category = "execution"
+mitre = "T1218.011"
+recommended_action = "block"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "rundll32"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "\\temp\\"
+
+[[rules]]
+id = "PROC-011"
+name = "Net User Admin Account Creation"
+score = 90
+category = "persistence"
+mitre = "T1136.001"
+recommended_action = "block"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "net.exe"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "localgroup administrators"
+
+[[rules]]
+id = "PROC-012"
+name = "BITSAdmin Download"
+score = 70
+category = "defense_evasion"
+mitre = "T1197"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "bitsadmin"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "/transfer"
+
+[[rules]]
+id = "PROC-013"
+name = "Shadow Copy Deletion"
+score = 95
+category = "impact"
+mitre = "T1490"
+recommended_action = "block"
+match_mode = "any"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "delete shadows"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "shadowcopy delete"
+[[rules.conditions]]
+field = "process.command_line"
+op = "contains"
+value = "vssadmin delete"
+
+[[rules]]
+id = "PROC-014"
+name = "PsExec Remote Execution"
+score = 75
+category = "lateral_movement"
+mitre = "T1569.002"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "process.image"
+op = "contains"
+value = "psexec"
+
+[[rules]]
+id = "PROC-015"
+name = "Script Interpreter Spawned from Unusual Parent"
+score = 70
+category = "execution"
+mitre = "T1059"
+recommended_action = "investigate"
+match_mode = "any"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "svchost"
+[[rules.conditions]]
+field = "process.parent_image"
+op = "contains"
+value = "services"

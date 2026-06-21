@@ -1,0 +1,37 @@
+# USB kuralları — 3 kural
+
+[[rules]]
+id = "USB-001"
+name = "USB Mass Storage Device Inserted"
+score = 40
+category = "initial_access"
+mitre = "T1091"
+recommended_action = "alert"
+[[rules.conditions]]
+field = "usb.device_class"
+op = "contains"
+value = "MassStorage"
+
+[[rules]]
+id = "USB-002"
+name = "Unknown USB Device Class"
+score = 55
+category = "initial_access"
+mitre = "T1091"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "usb.device_class"
+op = "not_contains"
+value = "MassStorage"
+
+[[rules]]
+id = "USB-003"
+name = "Suspicious USB Device ID Pattern"
+score = 70
+category = "initial_access"
+mitre = "T1091"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "usb.device_id"
+op = "contains"
+value = "rubber_ducky"

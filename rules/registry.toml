@@ -1,0 +1,117 @@
+# Registry kuralları — 7 kural
+
+[[rules]]
+id = "REG-001"
+name = "Run Key Persistence Added"
+score = 75
+category = "persistence"
+mitre = "T1547.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "CurrentVersion\\Run"
+[[rules.conditions]]
+field = "registry.operation"
+op = "equals"
+value = "create"
+
+[[rules]]
+id = "REG-002"
+name = "Winlogon Userinit Modified"
+score = 90
+category = "persistence"
+mitre = "T1547.004"
+recommended_action = "block"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "Winlogon"
+[[rules.conditions]]
+field = "registry.value_name"
+op = "equals"
+value = "Userinit"
+[[rules.conditions]]
+field = "registry.operation"
+op = "equals"
+value = "set"
+
+[[rules]]
+id = "REG-003"
+name = "AppInit DLL Persistence"
+score = 85
+category = "persistence"
+mitre = "T1546.010"
+recommended_action = "block"
+[[rules.conditions]]
+field = "registry.value_name"
+op = "equals"
+value = "AppInit_DLLs"
+[[rules.conditions]]
+field = "registry.operation"
+op = "equals"
+value = "set"
+
+[[rules]]
+id = "REG-004"
+name = "Windows Defender Disabled via Registry"
+score = 90
+category = "defense_evasion"
+mitre = "T1562.001"
+recommended_action = "block"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "Windows Defender"
+[[rules.conditions]]
+field = "registry.value_name"
+op = "equals"
+value = "DisableAntiSpyware"
+
+[[rules]]
+id = "REG-005"
+name = "UAC Bypass via Registry"
+score = 80
+category = "privilege_escalation"
+mitre = "T1548.002"
+recommended_action = "block"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "ConsentPromptBehaviorAdmin"
+
+[[rules]]
+id = "REG-006"
+name = "Service Binary Path Modified"
+score = 80
+category = "persistence"
+mitre = "T1543.003"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "SYSTEM\\CurrentControlSet\\Services"
+[[rules.conditions]]
+field = "registry.value_name"
+op = "equals"
+value = "ImagePath"
+[[rules.conditions]]
+field = "registry.operation"
+op = "equals"
+value = "set"
+
+[[rules]]
+id = "REG-007"
+name = "RunOnce Key Added"
+score = 65
+category = "persistence"
+mitre = "T1547.001"
+recommended_action = "investigate"
+[[rules.conditions]]
+field = "registry.key"
+op = "contains"
+value = "CurrentVersion\\RunOnce"
+[[rules.conditions]]
+field = "registry.operation"
+op = "equals"
+value = "create"
