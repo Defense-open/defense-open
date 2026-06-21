@@ -35,10 +35,27 @@ jobs:
       - name: Testler
         run: cargo test --all --locked
 
+  create-release:
+    name: Release Oluştur
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-and-test
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create.outputs.upload_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: GitHub Release oluştur
+        id: create
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+
   release:
     name: Release (${{ matrix.target }})
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: build-and-test
+    needs: create-release
     permissions:
       contents: write
     runs-on: ${{ matrix.os }}
@@ -72,11 +89,10 @@ jobs:
       - name: Binary'i yeniden adlandır (Windows)
         if: matrix.os == 'windows-latest'
         run: copy target\${{ matrix.target }}\release\defense-agent.exe ${{ matrix.artifact }}
-      - name: GitHub Release'e yükle
+      - name: Binary'i release'e yükle
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ matrix.artifact }}
-          generate_release_notes: true
 
   security-audit:
     name: Güvenlik Denetimi
