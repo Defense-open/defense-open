@@ -1,95 +1,95 @@
-# Gizlilik Politikası
+# Privacy Policy
 
-**Son güncelleme:** 2026-06-22
+**Last updated:** 2026-06-22
 
-Defense, sıfır telemetri prensibiyle çalışır. Bu belge tam olarak neyin toplandığını ve neyin toplanmadığını açıklar.
-
----
-
-## Ne Toplanır
-
-Defense ajanı çalışırken aşağıdaki verileri **yerel cihazınızda** üretir ve saklar:
-
-### Alert Çıktısı (alerts.jsonl veya stdout)
-
-| Veri | Örnek |
-|------|-------|
-| Süreç adı ve tam yolu | `C:\Windows\System32\cmd.exe` |
-| Komut satırı argümanları | `cmd.exe /c powershell -enc ...` |
-| PID ve üst süreç bilgisi | `pid: 1234, parent: WINWORD.EXE` |
-| Dosya yolu | `C:\Users\[USER]\AppData\Temp\evil.exe` |
-| Ağ bağlantısı (hedef IP ve port) | `185.220.101.47:443` |
-| Kayıt defteri anahtar yolu | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` |
-| USB cihaz sınıfı | `MassStorage` |
-| Zaman damgası | `2026-06-22T14:30:00Z` |
-| Tehdit skoru ve kural ID | `score: 85, rule: PROC-001` |
+Defense operates on a zero-telemetry principle. This document explains exactly what is and is not collected.
 
 ---
 
-## Ne Toplanmaz
+## What Is Collected
 
-Defense aşağıdaki verileri **hiçbir zaman toplamaz veya işlemez:**
+While running, Defense produces and stores the following data **locally on your device only**:
 
-- Dosya içerikleri (okunmaz, analiz edilmez)
-- Ağ trafiği içeriği (paket verisi, HTTP içeriği, şifreli veri)
-- Şifreler veya kimlik bilgileri
-- Kullanıcı adları (yalnızca dosya yollarında geçebilir)
-- Tarayıcı geçmişi veya çerezler
-- Tuş vuruşları (keylogger değildir)
-- Ekran görüntüsü
-- Coğrafi konum
-- Donanım kimlik bilgileri (MAC adresi, seri numarası vb.)
-- Lisans veya kullanım istatistikleri
+### Alert Output (alerts.jsonl or stdout)
 
----
-
-## Veriler Nerede Saklanır
-
-Tüm veriler **yalnızca yerel cihazınızda** saklanır:
-
-- Alert çıktısı: `--alert-file` parametresiyle belirttiğiniz dosya veya terminal stdout
-- Hiçbir veri otomatik olarak dışarıya gönderilmez
-- Hiçbir bulut bağlantısı kurulmaz
-- Hiçbir "phone home" mekanizması yoktur
-
-Bunu doğrulamak için ağ trafiğini izleyebilir veya kaynak kodu inceleyebilirsiniz.
+| Data | Example |
+|------|---------|
+| Process name and full path | `C:\Windows\System32\cmd.exe` |
+| Command-line arguments | `cmd.exe /c powershell -enc ...` |
+| PID and parent process info | `pid: 1234, parent: WINWORD.EXE` |
+| File path | `C:\Users\[USER]\AppData\Temp\evil.exe` |
+| Network connection (destination IP and port) | `185.220.101.47:443` |
+| Registry key path | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` |
+| USB device class | `MassStorage` |
+| Timestamp | `2026-06-22T14:30:00Z` |
+| Threat score and rule ID | `score: 85, rule: PROC-001` |
 
 ---
 
-## Veri Paylaşımı
+## What Is Never Collected
 
-Defense **asla** verilerinizi üçüncü taraflarla paylaşmaz.
+Defense **never** collects or processes:
 
-**Opsiyonel topluluk paylaşımı:** Tespit ettiğiniz tehditleri toplulukla paylaşmak isterseniz bu tamamen sizin inisiyatifinizde ve manueldir. Paylaşmadan önce hassas bilgileri (kullanıcı adı, iç IP adresi vb.) kaldırmanızı öneririz.
+- File contents (files are never read or analyzed)
+- Network payload (no packet data, HTTP content, or encrypted traffic)
+- Passwords or credentials
+- Usernames (may appear in file paths only)
+- Browser history or cookies
+- Keystrokes (this is not a keylogger)
+- Screenshots
+- Geographic location
+- Hardware identifiers (MAC address, serial numbers, etc.)
+- License or usage statistics
 
 ---
 
-## Verilerinizi Silme
+## Where Data Is Stored
 
-Defense'in ürettiği tüm verileri silmek için:
+All data stays **on your local device only**:
+
+- Alert output: the file you specify via `--alert-file`, or terminal stdout
+- Nothing is automatically sent anywhere
+- No cloud connections are made
+- There is no "phone home" mechanism
+
+You can verify this by monitoring network traffic or auditing the source code.
+
+---
+
+## Data Sharing
+
+Defense **never** shares your data with third parties.
+
+**Optional community sharing:** If you choose to share detected threats with the community, this is entirely your decision and is always manual. We recommend removing sensitive information (username, internal IPs, etc.) before sharing.
+
+---
+
+## Deleting Your Data
+
+To remove all data produced by Defense:
 
 ```bash
-# Alert dosyasını sil (belirttiğiniz dosya)
+# Delete the alert file (whichever file you specified)
 rm alerts.jsonl
 
-# Veya stdout kullanıyorsanız zaten yerel dosya üretilmez
+# If you used stdout, no local file was written
 ```
 
-Defense kurulumunu kaldırdığınızda hiçbir arka kapı, servis veya kalıcı veri kalmaz.
+Uninstalling Defense leaves no backdoors, services, or persistent data behind.
 
 ---
 
-## Açık Kaynak Güvencesi
+## Open Source Guarantee
 
-Defense tamamen açık kaynaklıdır. Bu gizlilik politikasındaki her iddia kaynak koddan doğrulanabilir:
+Defense is fully open source. Every claim in this privacy policy can be verified from the source code:
 
-- Dış ağ bağlantısı yok: `grep -r "reqwest\|ureq\|hyper" defense-core/src/` — hiçbir HTTP client bağımlılığı yok
-- Dosya içeriği okunmuyor: Filesystem kolektörü yalnızca inotify/FSEvents/RDCW olaylarını dinler, dosya içeriğini okumaz
+- No outbound network calls: `grep -r "reqwest\|ureq\|hyper" defense-core/src/` — no HTTP client dependency exists
+- File contents are never read: the filesystem collector only listens to inotify/FSEvents/RDCW events; it never opens or reads file contents
 
-Herhangi bir endişeniz için [SECURITY.md](SECURITY.md) üzerinden bildirin.
+For any concerns, please use the contact channels in [SECURITY.md](SECURITY.md).
 
 ---
 
-## İletişim
+## Contact
 
-Gizlilikle ilgili sorularınız için GitHub Discussions veya SECURITY.md'deki iletişim kanallarını kullanabilirsiniz.
+For privacy-related questions, use GitHub Discussions or the contact channels in [SECURITY.md](SECURITY.md).

@@ -1,58 +1,58 @@
-# Güvenlik Politikası
+# Security Policy
 
-## Kapsam
+## Scope
 
-Bu politika aşağıdaki bileşenleri kapsar:
+This policy covers:
 
-- `defense-agent` binary ve kaynak kodu
-- `defense-core` kütüphanesi
-- TOML kural motoru ve kural dosyaları
-- CI/CD pipeline ve bağımlılıklar
+- `defense-agent` binary and source code
+- `defense-core` library
+- TOML rule engine and rule files
+- CI/CD pipeline and dependencies
 
-## Güvenlik Açığı Bildirimi
+## Reporting a Vulnerability
 
-**Lütfen güvenlik açıklarını kamuya açık GitHub Issue olarak paylaşmayın.**
+**Please do not report security vulnerabilities as public GitHub Issues.**
 
-### Bildirim Kanalı
+### How to Report
 
-GitHub'ın **Private Security Advisories** özelliğini kullanın:
+Use GitHub's **Private Security Advisories**:
 
-1. Bu repo sayfasında **Security** sekmesine gidin
-2. **"Report a vulnerability"** butonuna tıklayın
-3. Formu doldurun
+1. Go to the **Security** tab on this repository
+2. Click **"Report a vulnerability"**
+3. Fill in the form
 
-Alternatif olarak e-posta ile de iletişime geçebilirsiniz — e-posta adresini GitHub profilimizde bulabilirsiniz.
+Alternatively, you can reach us via the email address listed on our GitHub profile.
 
-### Ne Beklemelisiniz
+### What to Expect
 
-| Aşama | Süre |
-|-------|------|
-| Bildirimin alındığının onaylanması | 48 saat |
-| İlk değerlendirme ve geri bildirim | 7 gün |
-| Düzeltme hedefi (kritik açıklar) | 30 gün |
-| Düzeltme hedefi (diğer açıklar) | 90 gün |
+| Stage | Timeline |
+|-------|----------|
+| Acknowledgement | 48 hours |
+| Initial assessment and feedback | 7 days |
+| Fix target (critical vulnerabilities) | 30 days |
+| Fix target (other vulnerabilities) | 90 days |
 
-Düzeltme yayınlandıktan sonra, bildirimi yapan kişiyle mutabık kalınan süre sonunda açık kamuoyuyla paylaşılır (Coordinated Disclosure).
+After a fix is released, the vulnerability will be disclosed publicly at a time agreed upon with the reporter (Coordinated Disclosure).
 
-## Ödül
+## Reward
 
-Şu an resmi bir bug bounty programımız yok. Ancak geçerli kritik bir güvenlik açığı bildirimi için **1 yıllık Pro lisans** sunuyoruz (ilerleyen sürümlerde geçerli olacak).
+We don't have a formal bug bounty program yet. However, a valid critical vulnerability report earns **1 year of Pro license** (applicable in upcoming releases).
 
-Geçerli sayılan bildirimler:
-- Defense agent'ın kötüye kullanılmasına olanak tanıyan açıklar
-- Kural motorunun atlatılmasını sağlayan açıklar
-- Alert çıktısında veri sızıntısına yol açan açıklar
-- Bağımlılıklarda kritik (CVSS ≥ 7.0) güvenlik açıkları
+Valid reports include:
+- Vulnerabilities that allow Defense agent to be exploited or bypassed
+- Vulnerabilities that allow rule engine evasion
+- Data leakage in alert output
+- Critical (CVSS ≥ 7.0) vulnerabilities in dependencies
 
-## Kapsam Dışı
+## Out of Scope
 
-- Teorik saldırılar (PoC olmadan)
-- Defense'in çalıştığı işletim sistemindeki açıklar
-- Defense'i kaldırıp kaldıramama (yönetici yetkisi ile her şey mümkün — bu bir sınırlama, açık değil)
-- Sosyal mühendislik
+- Theoretical attacks without a proof of concept
+- Vulnerabilities in the underlying operating system
+- Ability to uninstall Defense (admin privileges can always do this — this is a limitation, not a vulnerability)
+- Social engineering
 
-## Güvenlik Anlayışımız
+## Our Security Model
 
-Defense, kullanıcı-alanı (user-space) bir araçtır. Ayrıcalıklı bir saldırgan Defense'i sonlandırabilir — bu tasarım gereği bir sınırlamadır ve dokümantasyonda açıkça belirtilmiştir. Kernel-level koruma (ELAM/eBPF) sonraki fazlarda planlanmaktadır.
+Defense is a user-space tool. A privileged attacker can terminate it — this is an acknowledged limitation documented openly. Kernel-level protection (ELAM/eBPF) is planned for future phases.
 
-Defense **hiçbir veriyi dışarıya göndermez.** Kaynak kod açık ve denetlenebilirdir.
+Defense **never sends any data off your machine.** The source code is open and auditable.

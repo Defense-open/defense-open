@@ -1,24 +1,34 @@
-# Defense XDR
+# Defense
 
-**Davranış tabanlı, açık kaynaklı uç nokta güvenlik ajanı.**
+**Open-source, behavior-based endpoint security agent.**
 
-İmza veritabanı yok. Telemetri yok. Verileriniz sadece sizin cihazınızda.
+No signature database. No telemetry. Your data stays on your machine.
 
-Defense, süreç davranışlarını, dosya sistemi değişikliklerini, ağ bağlantılarını, kayıt defteri değişikliklerini ve USB cihazlarını gerçek zamanlı izler. Kurallar TOML formatında — kod bilmeden kendi kurallarınızı yazabilirsiniz.
+Defense monitors process behavior, filesystem changes, network connections, registry modifications, and USB devices in real time. Rules are written in TOML — you can write your own without touching any code.
 
 ---
 
-## Desteklenen Platformlar
+## Supported Platforms
 
 - Windows 10/11
-- Linux (Ubuntu 22.04+, Arch, Debian tabanlı)
+- Linux (Ubuntu 22.04+, Arch, Debian-based)
 - macOS 12+
 
 ---
 
-## Kurulum
+## Installation
 
-### Kaynak koddan derle (önerilen)
+### Download a pre-built binary
+
+Go to [Releases](https://github.com/Defense-open/defense-open/releases) and download the binary for your platform:
+
+| Platform | File |
+|----------|------|
+| Linux | `defense-agent-linux-x86_64` |
+| macOS | `defense-agent-macos-x86_64` |
+| Windows | `defense-agent-windows-x86_64.exe` |
+
+### Build from source
 
 ```bash
 git clone https://github.com/Defense-open/defense-open.git
@@ -26,49 +36,46 @@ cd defense-open
 cargo build --release
 ```
 
-Binary çıktısı: `target/release/defense-agent`
+Output: `target/release/defense-agent`
 
-### Gereksinimler
-
-- Rust 1.78+ (`rustup` ile kurulum: https://rustup.rs)
-- Windows'ta Registry ve USB kolektörleri için yönetici yetkisi gerekmez; ancak bazı sistem dizinlerini izlemek için yönetici olarak çalıştırmanız önerilir.
+**Requirements:** Rust 1.78+ — install via [rustup.rs](https://rustup.rs)
 
 ---
 
-## Kullanım
+## Usage
 
 ```bash
-# Tüm kolektörlerle başlat (varsayılan)
+# Start with all collectors (default)
 defense-agent --rules-dir ./rules
 
-# Alert'leri dosyaya yaz
+# Write alerts to a file
 defense-agent --rules-dir ./rules --alert-file alerts.jsonl
 
-# Sadece belirli kolektörler
+# Run specific collectors only
 defense-agent --rules-dir ./rules --collectors process,fs,network
 
-# Yüksek skorlu alert'leri filtrele (jq gerektirir)
+# Filter high-severity alerts (requires jq)
 defense-agent --rules-dir ./rules | jq 'select(.score >= 70)'
 
-# Yardım
+# Help
 defense-agent --help
 ```
 
-### Kolektörler
+### Collectors
 
-| İsim | Ne İzler |
-|------|----------|
-| `process` | Yeni süreç oluşturma, komut satırı argümanları |
-| `fs` | Dosya oluşturma, değiştirme, silme |
-| `network` | Ağ arayüz istatistikleri, TCP bağlantıları (Linux) |
-| `registry` | Windows kayıt defteri Run/Winlogon/Services anahtarları |
-| `usb` | USB/çıkarılabilir disk bağlantısı |
+| Name | What it monitors |
+|------|-----------------|
+| `process` | Process creation, command-line arguments |
+| `fs` | File create, modify, delete events |
+| `network` | Network interface stats, TCP connections (Linux) |
+| `registry` | Windows registry Run/Winlogon/Services keys |
+| `usb` | USB / removable disk connections |
 
 ---
 
-## Alert Formatı
+## Alert Format
 
-Her eşleşen kural için tek satır JSON çıktısı:
+One JSON line per matching rule:
 
 ```json
 {
@@ -89,19 +96,19 @@ Her eşleşen kural için tek satır JSON çıktısı:
 }
 ```
 
-**Skor:** 0–100 arası tehdit skoru. 70+ dikkat gerektiriyor, 90+ kritik.  
-**MITRE:** Alert'in hangi ATT&CK tekniğiyle ilişkilendirildiği.
+**Score:** 0–100 threat score. 70+ warrants attention, 90+ is critical.  
+**MITRE:** The ATT&CK technique the alert maps to.
 
 ---
 
-## Kural Yazımı
+## Writing Rules
 
-Kural dosyaları `rules/` dizininde `.toml` formatında. Kendiniz yazabilirsiniz:
+Rules live in the `rules/` directory as `.toml` files. You can add your own:
 
 ```toml
 [[rules]]
 id = "CUSTOM-001"
-name = "Şüpheli Python Betiği"
+name = "Suspicious Python Script"
 score = 60
 category = "execution"
 mitre = "T1059.006"
@@ -119,75 +126,73 @@ op = "contains"
 value = "base64"
 ```
 
-### Kullanılabilir Field'lar
+### Available Fields
 
-| Prefix | Field'lar |
-|--------|-----------|
+| Prefix | Fields |
+|--------|--------|
 | `process.` | `image`, `command_line`, `pid`, `parent_image` |
 | `fs.` | `path`, `event_type` |
 | `network.` | `dst_ip`, `dst_port`, `protocol`, `bytes_sent` |
 | `registry.` | `key`, `value_name`, `operation` |
 | `usb.` | `device_id`, `device_class` |
 
-### Operatörler
+### Operators
 
 `contains`, `not_contains`, `equals`, `not_equals`, `starts_with`, `ends_with`, `gt`, `lt`, `eq`
 
-Tüm string karşılaştırmalar büyük/küçük harf duyarsızdır.
+All string comparisons are case-insensitive.
 
 ---
 
-## Mevcut Kural Seti
+## Included Rules
 
-50 kural, 5 kategori, tamamı MITRE ATT&CK etiketli:
+50 rules across 5 categories, all MITRE ATT&CK tagged:
 
-- **Process (15):** PowerShell encoded command, Mimikatz, shadow copy silme, PsExec, WMI process creation...
-- **FileSystem (15):** Ransomware uzantıları, LSASS dump, başlangıç klasörü, geçici dizin...
-- **Network (10):** C2 portları (4444/1337/31337), Tor (9050/9051), yüksek veri transferi...
-- **Registry (7):** Run key kalıcılığı, Windows Defender devre dışı, UAC bypass...
-- **USB (3):** Büyük depolama cihazı, bilinmeyen sınıf, Rubber Ducky kalıbı...
-
----
-
-## Gizlilik
-
-Defense **hiçbir veriyi dışarıya göndermez.** Tüm analiz yerel cihazınızda gerçekleşir.
-
-Alert çıktısında **bulunan**: süreç adları, PID'ler, dosya yolları, dış IP adresleri, zaman damgası.  
-Alert çıktısında **bulunmayan**: dosya içerikleri, ağ trafiği içeriği, şifreler, kullanıcı adları, tarayıcı geçmişi, tuş vuruşları.
-
-Detaylar için [PRIVACY.md](PRIVACY.md) dosyasına bakın.
+- **Process (15):** PowerShell encoded command, Mimikatz, shadow copy deletion, PsExec, WMI process creation...
+- **FileSystem (15):** Ransomware extensions, LSASS dump, startup folder writes, temp directory...
+- **Network (10):** C2 ports (4444/1337/31337), Tor (9050/9051), high data transfer...
+- **Registry (7):** Run key persistence, Windows Defender disabled, UAC bypass...
+- **USB (3):** Mass storage device, unknown class, Rubber Ducky pattern...
 
 ---
 
-## Log Paylaşımı (Opsiyonel)
+## Privacy
 
-Tespit ettiğiniz gerçek tehditleri toplulukla paylaşmak, kural setini iyileştirmemize yardımcı olur.
+Defense **never sends any data off your machine.** All analysis happens locally.
 
-Paylaşmadan önce lütfen aşağıdakileri kontrol edin:
-- Kullanıcı adı içeren yolları anonimleştirin (örn. `C:\Users\[USER]\...`)
-- İç IP adreslerini çıkarın
-- Paylaşmak istemediğiniz komut satırı argümanlarını silin
+Alert output **contains**: process names, PIDs, file paths, external IP addresses, timestamps.  
+Alert output **never contains**: file contents, network payload, passwords, usernames, browser history, keystrokes.
 
-Paylaşım kanalları:
-- **GitHub Discussion:** https://github.com/Defense-open/defense-open/discussions
-- **Discord:** `#threats-found` kanalı
+See [PRIVACY.md](PRIVACY.md) for details.
 
 ---
 
-## Katkıda Bulunma
+## Sharing Logs (Optional)
 
-### Kural Katkısı
+Sharing threats you find helps us improve the rule set. Before sharing, please:
+- Anonymize paths containing your username (e.g. `C:\Users\[USER]\...`)
+- Remove internal IP addresses
+- Strip any command-line arguments you'd rather keep private
 
-Yeni bir tehdit kalıbı tespit ettiniz? GitHub'da kural PR'ı açın:
+Share via:
+- **GitHub Discussions:** https://github.com/Defense-open/defense-open/discussions
+- **Discord:** `#threats-found` channel
 
-1. `rules/` dizininde uygun `.toml` dosyasını düzenleyin
-2. Kuralı tetikleyen örnek bir event ekleyin (kural test formatında)
-3. PR başlığını `[Rule] KURAL-ID: Kural adı` formatında yazın
+---
 
-**Kabul edilen her kural PR'ı = 3 aylık Pro lisans** (ilerleyen sürümlerde).
+## Contributing
 
-### Kod Katkısı
+### Rule Contributions
+
+Found a new threat pattern? Open a rule PR:
+
+1. Edit the appropriate `.toml` file in `rules/`
+2. Include a sample event that triggers the rule
+3. Title the PR as `[Rule] RULE-ID: Rule name`
+
+**Every accepted rule PR = 3 months of Pro license** (in upcoming releases).
+
+### Code Contributions
 
 ```bash
 git clone https://github.com/Defense-open/defense-open.git
@@ -196,22 +201,22 @@ cargo test --all
 cargo clippy --all-targets -- -D warnings
 ```
 
-PR açmadan önce tüm testlerin ve clippy kontrolünün geçtiğinden emin olun.
+Make sure all tests and clippy checks pass before opening a PR.
 
-Güvenlik açığı bildirimi için [SECURITY.md](SECURITY.md) dosyasına bakın.
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).
 
 ---
 
-## CI Durumu
+## CI Status
 
 [![CI](https://github.com/Defense-open/defense-open/actions/workflows/ci.yml/badge.svg)](https://github.com/Defense-open/defense-open/actions/workflows/ci.yml)
 
-3 platform (Ubuntu, macOS, Windows) + cargo-audit + cargo-deny
+Build & test on Ubuntu, macOS, and Windows + cargo-audit + cargo-deny on every push.
 
 ---
 
-## Lisans
+## License
 
-MIT — detaylar için [LICENSE](LICENSE) dosyasına bakın.
+MIT — see [LICENSE](LICENSE).
 
-Kural dosyaları (`rules/`) Apache 2.0 ile lisanslanmıştır.
+Rule files (`rules/`) are licensed under Apache 2.0.

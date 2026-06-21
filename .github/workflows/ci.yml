@@ -22,21 +22,21 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
-      - name: Rust toolchain kur
+      - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
       - name: Cache
         uses: Swatinem/rust-cache@v2
-      - name: Fmt kontrolü
+      - name: Check formatting
         run: cargo fmt --all -- --check
-      - name: Clippy (uyarı = hata)
+      - name: Clippy (warnings as errors)
         run: cargo clippy --all-targets --all-features -- -D warnings
-      - name: Testler
+      - name: Run tests
         run: cargo test --all --locked
 
   create-release:
-    name: Release Oluştur
+    name: Create Release
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build-and-test
     permissions:
@@ -46,7 +46,7 @@ jobs:
       upload_url: ${{ steps.create.outputs.upload_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: GitHub Release oluştur
+      - name: Create GitHub Release
         id: create
         uses: softprops/action-gh-release@v2
         with:
@@ -73,39 +73,39 @@ jobs:
             artifact: defense-agent-windows-x86_64.exe
     steps:
       - uses: actions/checkout@v4
-      - name: Rust toolchain kur
+      - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
       - name: Cache
         uses: Swatinem/rust-cache@v2
-      - name: Release binary derle
+      - name: Build release binary
         run: cargo build --release --locked --target ${{ matrix.target }}
-      - name: Binary'i yeniden adlandır (Linux/macOS)
+      - name: Rename binary (Linux/macOS)
         if: matrix.os != 'windows-latest'
         run: |
           cp target/${{ matrix.target }}/release/defense-agent ${{ matrix.artifact }}
           chmod +x ${{ matrix.artifact }}
-      - name: Binary'i yeniden adlandır (Windows)
+      - name: Rename binary (Windows)
         if: matrix.os == 'windows-latest'
         run: copy target\${{ matrix.target }}\release\defense-agent.exe ${{ matrix.artifact }}
-      - name: Binary'i release'e yükle
+      - name: Upload binary to release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ matrix.artifact }}
 
   security-audit:
-    name: Güvenlik Denetimi
+    name: Security Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rust toolchain kur
+      - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-      - name: cargo-audit kur
+      - name: Install cargo-audit
         run: cargo install cargo-audit --locked
-      - name: cargo-audit çalıştır (CVSS ≥7.0 = CI kırmızı)
+      - name: Run cargo-audit
         run: cargo audit --deny unsound --deny yanked
-      - name: cargo-deny (lisans + bağımlılık kontrolü)
+      - name: Run cargo-deny (licenses + dependencies)
         uses: EmbarkStudios/cargo-deny-action@v2
         with:
           command: check licenses bans sources
