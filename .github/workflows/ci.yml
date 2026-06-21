@@ -32,16 +32,20 @@ jobs:
       - name: Clippy (uyarı = hata)
         run: cargo clippy --all-targets --all-features -- -D warnings
       - name: Testler
-        run: cargo test --all
+        run: cargo test --all --locked
 
   security-audit:
     name: Güvenlik Denetimi
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: cargo-audit (CVSS ≥7.0 = CI kırmızı)
-        uses: rustsec/audit-check@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Rust toolchain kur
+        uses: dtolnay/rust-toolchain@stable
+      - name: cargo-audit kur
+        run: cargo install cargo-audit --locked
+      - name: cargo-audit çalıştır (CVSS ≥7.0 = CI kırmızı)
+        run: cargo audit --deny warnings
       - name: cargo-deny (lisans + bağımlılık kontrolü)
         uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check licenses bans sources
