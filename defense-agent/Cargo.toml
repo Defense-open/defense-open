@@ -1,9 +1,9 @@
 [package]
 name = "defense-agent"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
-description = "Defense XDR — community endpoint agent"
+description = "Defense — open-source behavior-based endpoint security agent"
 
 [dependencies]
 defense-core = { path = "../defense-core" }
