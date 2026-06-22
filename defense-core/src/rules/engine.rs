@@ -46,8 +46,13 @@ fn rule_matches(rule: &RuleDef, event: &SecurityEvent) -> bool {
         let field_val = fields
             .iter()
             .find(|(k, _)| *k == cond.field.as_str())
-            .map(|(_, v)| v.as_str())
-            .unwrap_or("");
+            .map(|(_, v)| v.as_str());
+
+        // If the field doesn't exist on this event type, the condition
+        // cannot be satisfied — skip the entire rule.
+        let Some(field_val) = field_val else {
+            return false;
+        };
 
         let ok = eval_condition(&cond.op, field_val, &cond.value);
         if ok {

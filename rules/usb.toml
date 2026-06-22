@@ -19,10 +19,15 @@ score = 55
 category = "initial_access"
 mitre = "T1091"
 recommended_action = "investigate"
+match_mode = "all"
 [[rules.conditions]]
 field = "usb.device_class"
-op = "not_contains"
+op = "not_equals"
 value = "MassStorage"
+[[rules.conditions]]
+field = "usb.device_class"
+op = "not_equals"
+value = ""
 
 [[rules]]
 id = "USB-003"

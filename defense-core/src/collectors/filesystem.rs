@@ -72,7 +72,9 @@ impl Collector for FileSystemCollector {
 
         for path in &self.watch_paths {
             if path.exists() {
-                watcher.watch(path, RecursiveMode::Recursive)?;
+                if let Err(e) = watcher.watch(path, RecursiveMode::Recursive) {
+                    eprintln!("[Defense] FileSystemCollector: skipping {} — {e}", path.display());
+                }
             }
         }
 
